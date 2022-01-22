@@ -1,0 +1,14 @@
+.allShoppingList {
+  display: flex;
+  justify-content: center;
+  text-align: center;
+  flex-direction: column;
+}
+.allShoppingList p {
+margin: 1rem 3rem 0 3rem;
+}
+
+.cart-shopping {
+  display: flex;
+  flex-direction: row;
+}
