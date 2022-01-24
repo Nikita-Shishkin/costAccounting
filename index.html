@@ -1,23 +1,37 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <meta http-equiv="X-UA-Compatible" content="IE=edge">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <link rel="stylesheet" href="./index.css">
-  <title>Document</title>
-</head>
-<body>
-  <div class="header">
-    <h1>Заголовок</h1>
-    <div>
-      <input id="shopping-store" type="text">
-      <input id="shopping-date" type="date">
-      <input id="shopping-price" type="number">
-      <button id="shopping-add">Добавить покупку</button>
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="./index.css" />
+    <title>Document</title>
+  </head>
+  <body>
+    <div class="header">
+      <div>
+        <h1>Учет моих покупок</h1>
+      </div>
+      <div class="inputs-contaner">
+        <div class="inputs">
+          <p>Название мазазина:</p>
+          <input id="shopping-store" type="text" />
+        </div>
+        <div class="inputs">
+          <p>Дата покупки:</p>
+          <input id="shopping-date" type="date" />
+        </div>
+        <div class="inputs">
+          <p>Сумма покупки:</p>
+          <input id="shopping-price" type="number" />
+        </div>
+        <div class="inputs">
+          <p>Добавить покупку.</p>
+          <button id="shopping-add">$$$</button>
+        </div>
+      </div>
     </div>
-  </div>
-  <div id="shopping-list" class="allShoppingList"></div>
-  <script src="./index.js"></script>
-</body>
+    <div id="shopping-list" class="allShoppingList"></div>
+    <script src="./index.js"></script>
+  </body>
 </html>
