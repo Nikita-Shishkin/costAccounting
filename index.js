@@ -20,36 +20,59 @@ let totalSumm = [];
 
 window.onload = function () {
   inputStore = document.getElementById("shopping-store");
+  inputStore.placeholder = "магазин";
   inputStore.addEventListener("change", updateInputStoreValue);
   inputStore.addEventListener("keyup", keyupButtonAdd);
   inputDate = document.getElementById("shopping-date");
   inputDate.addEventListener("change", updateInputDateValue);
   inputDate.addEventListener("keyup", keyupButtonAdd);
   inputPrice = document.getElementById("shopping-price");
+  inputPrice.placeholder = "сумма";
   inputPrice.addEventListener("change", updateInputPriceValue);
   inputPrice.addEventListener("keyup", keyupButtonAdd);
   buttonAddShopping = document.getElementById("shopping-add");
   buttonAddShopping.addEventListener("click", onClickButtonAdd);
+  // const response = await fetch ('http://localhost:7777/allTask', {
+  //   method: "GET",
+  // });
+
+  // const result = await response.json();
+  // allShoppingList = result;
+  // design();
 };
+
 const onClickButtonAdd = (index) => {
-  if (inputStore.value === "") {
-    alert("Введите название магазина");
-  } else if (inputPrice.value === "") {
-    alert("введите потраченную сумму");
+  if (
+    inputStore.value === "" ||
+    inputDate.value === "" ||
+    inputPrice.value === ""
+  ) {
+    alert("Веедите данные в пустые поля");
   } else {
+    // const response = await fetch('http://localhost:7777/createTask', {
+    //   method: 'POST',
+    //   headers: {
+    //     'Counter-Type': 'applacation/json;charset=utf-8',
+    //     'Access-Control-Allow-Origin': '*'
+    //   },
+    //   body: JSON.stringify({
+    //     Store: inputStoreValue,
+    //     Date: inputDateValue,
+    //     Price: inputPriceValue,
+    //   });
+    // });
+
+    // const result = await response.json()
     allShoppingList.push({
-      Store: inputStoreValue,
-      Date: inputDateValue,
-      Price: inputPriceValue,
-      id: `id-${inputStoreValue}`,
-      isChecked: false,
+      store: inputStoreValue,
+      date: inputDateValue,
+      price: inputPriceValue,
     });
     totalSumm.push(Number(inputPriceValue));
+    inputStore.value = "";
+    inputDate.value = "";
+    inputPrice.value = "";
   }
-
-  inputStore.value = "";
-  inputDateValue.value = "";
-  inputPrice.value = "";
   render();
 };
 const keyupButtonAdd = (e) => {
@@ -62,15 +85,18 @@ const keyupEdit = (event, index) => {
     clickImgDoneShopping(index);
   }
 };
-const changeCheckboxValue = (index) => {
-  allShoppingList[index].isChecked = !allShoppingList[index].isChecked;
-  render();
-};
 const clickImgEditShopping = (index) => {
   tempIndex = index;
   render();
 };
+const dblclickEditShopping = (index) => {
+  tempIndex = index;
+  render();
+};
 const clickImgDeleteShopping = (index) => {
+  // const response = await fetch(`http://localhost:7777/deleteTask?_id=${allShoppingList[index]._id}` {
+  //   method: "DELETE",
+  // });
   allShoppingList.splice(index, 1);
   totalSumm.splice(index, 1);
   render();
@@ -85,13 +111,24 @@ const changeInputEditPrice = (event) => {
   tempInputPriceValue = event.target.value;
 };
 const clickImgDoneShopping = (index) => {
-  allShoppingList[index].Store =
-    tempInputStoreValue || allShoppingList[index].Store;
-  allShoppingList[index].Date =
-    tempInputDateValue || allShoppingList[index].Date;
-  allShoppingList[index].Price =
-    tempInputPriceValue || allShoppingList[index].Price;
+  console.log(tempInputStoreValue);
+
+  allShoppingList[index].store =
+  tempInputStoreValue
+  allShoppingList[index].date =
+    tempInputDateValue || allShoppingList[index].date;
+  allShoppingList[index].price =
+    tempInputPriceValue || allShoppingList[index].price;
   totalSumm[index] = Number(tempInputPriceValue) || totalSumm[index];
+
+  // const response = await fetch("http://localhost:7777/updateTask", {
+  //   method: "PATCH",
+  //   headers: {
+  //     'Counter-Type': 'applacation/json;charset=utf-8',
+  //     'Access-Control-Allow-Origin': '*',
+  //   },
+  //   body: JSON.stringify(allShoppingList[index]),
+  // });
   tempIndex = -1;
   render();
 };
@@ -115,45 +152,37 @@ const render = () => {
   while (shoppingList.firstChild) {
     shoppingList.removeChild(shoppingList.firstChild);
   }
-  let totalPrice = document.createElement("p");
-  totalPrice.innerText = `Общая сумма покупок: ${
-    totalSumm.length > 0 ? totalSumm.reduce((a, b) => a + b) : 0
-  } руб.`;
-  shoppingList.appendChild(totalPrice);
-
-  allShoppingList.sort((a, b) => a.isChecked - b.isChecked);
+  if (allShoppingList.length > 0) {
+    let totalPrice = document.createElement("p");
+    totalPrice.innerText = `Общая сумма покупок: ${
+      totalSumm.length > 0 ? totalSumm.reduce((a, b) => a + b) : 0
+    } руб.`;
+    shoppingList.appendChild(totalPrice);
+  }
 
   allShoppingList.map((item, index) => {
     let cart = document.createElement("div");
     cart.className = "allShoppingList";
     cart.id = `id-${index}`;
 
-    let checkbox = document.createElement("input");
-    checkbox.type = "checkbox";
-    checkbox.checked = item.isChecked;
-    checkbox.onclick = () => changeCheckboxValue(index);
-    cart.appendChild(checkbox);
-
     if (tempIndex === index) {
-      checkbox.disabled = true;
-
       let inputEditStore = document.createElement("input");
       inputEditStore.type = "text";
-      inputEditStore.value = item.Store;
+      inputEditStore.value = item.store;
       inputEditStore.onkeyup = (event) => keyupEdit(event, index);
       inputEditStore.onchange = (event) => changeInputEditStore(event, index);
       cart.appendChild(inputEditStore);
 
       let inputEditDate = document.createElement("input");
       inputEditDate.type = "date";
-      inputEditDate.value = item.Date;
+      inputEditDate.value = item.date;
       inputEditDate.onkeyup = (event) => keyupEdit(event, index);
       inputEditDate.onchange = (event) => changeInputEditDate(event);
       cart.appendChild(inputEditDate);
 
       let inputEditPrice = document.createElement("input");
       inputEditPrice.type = "number";
-      inputEditPrice.value = item.Price;
+      inputEditPrice.value = item.price;
       inputEditPrice.onkeyup = (event) => keyupEdit(event, index);
       inputEditPrice.onchange = (event) => changeInputEditPrice(event);
       cart.appendChild(inputEditPrice);
@@ -171,15 +200,18 @@ const render = () => {
       cart.appendChild(imgCancelShopping);
     } else {
       let paragrafStore = document.createElement("p");
-      paragrafStore.innerText = `${index + 1}) Магазин: ` + item.Store;
+      paragrafStore.innerText = `${index + 1}) Магазин: ` + item.store;
+      paragrafStore.ondblclick = () => dblclickEditShopping(index);
       cart.appendChild(paragrafStore);
 
       let paragrafDate = document.createElement("p");
-      paragrafDate.innerText = item.Date;
+      paragrafDate.innerText = item.date;
+      paragrafDate.ondblclick = () => dblclickEditShopping(index);
       cart.appendChild(paragrafDate);
 
       let paragrafPrice = document.createElement("p");
-      paragrafPrice.innerText = item.Price + " pуб.";
+      paragrafPrice.innerText = item.price + " pуб.";
+      paragrafPrice.ondblclick = () => dblclickEditShopping(index);
       cart.appendChild(paragrafPrice);
 
       let imgEditShopping = document.createElement("img");
